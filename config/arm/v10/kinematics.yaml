@@ -5,7 +5,13 @@ joint1:
     z: 0.0625
     roll: 0
     pitch: 0
-    yaw: 0
+    # Joint-1 zero offset. Measured 2026-11-01 with both arms hanging
+    # vertically at the robot's sides (operator-verified): encoders read
+    # left +0.858 rad, right -0.898 rad, while this description's zero is the
+    # vertical pose. The arm macro mirrors yaw for the left arm, so this single
+    # value cancels both (left -0.878, right +0.878; residual <= 0.02 rad).
+    # Model-only correction: no motor zero was rewritten.
+    yaw: 0.878
 
 joint2:
   kinematic:
