@@ -10,8 +10,11 @@
   <!-- Rotation offset between ee and parent frame -->
   <xacro:arg name="rpy_ee" default= "0 0 0" />
 
-  <!-- Position offset between ee frame and tcp frame -->
-  <xacro:arg name="tcp_xyz" default="0 -0.0 0.08" />
+  <!-- Position offset between ee frame and tcp frame.
+       Upstream enactic/openarm_description 78ae5be sets this to 0.09 (TCP
+       190.1 mm from link7) to match openarm_isaac_lab and openarm_mujoco.
+       Local was 0.08, putting every grasp pose 10 mm short. -->
+  <xacro:arg name="tcp_xyz" default="0 -0.0 0.09" />
 
   <!-- Rotation offset between ee frame and tcp frame -->
   <xacro:arg name="tcp_rpy" default="0 0 0" />
