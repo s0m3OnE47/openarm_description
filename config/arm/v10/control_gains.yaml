@@ -41,5 +41,8 @@ joint7:
   kd: 0.5
 
 hand:
-  kp: 5.0
-  kd: 0.1
+  # MIT gains act in MOTOR radians (0.044 m joint = 1.05 rad motor, ~24 rad/m).
+  # Squeeze ≈ kp * error: 5 mm plate -> 0.12 rad -> ~3.5 Nm at kp=30 (DM4310 ok).
+  # kp >> 60 saturates the motor and makes the fingers vibrate.
+  kp: 30.0
+  kd: 1.0
