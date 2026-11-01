@@ -49,6 +49,30 @@
 
   <xacro:arg name="can_fd" default="true" />
 
+  <xacro:arg name="camera_head" default="true" />
+
+  <xacro:property name="camera_mount"
+    value="${xacro.load_yaml('$(find openarm_description)/config/camera/camera_mount.yaml')}"/>
+
+  <xacro:property name="cam_ax" value="${camera_mount['assembly_xyz'][0]}"/>
+  <xacro:property name="cam_ay" value="${camera_mount['assembly_xyz'][1]}"/>
+  <xacro:property name="cam_az" value="${camera_mount['assembly_xyz'][2]}"/>
+  <xacro:property name="cam_ar" value="${camera_mount['assembly_rpy'][0]}"/>
+  <xacro:property name="cam_ap" value="${camera_mount['assembly_rpy'][1]}"/>
+  <xacro:property name="cam_ayw" value="${camera_mount['assembly_rpy'][2]}"/>
+  <xacro:property name="cam_ox" value="${camera_mount['optical_xyz'][0]}"/>
+  <xacro:property name="cam_oy" value="${camera_mount['optical_xyz'][1]}"/>
+  <xacro:property name="cam_oz" value="${camera_mount['optical_xyz'][2]}"/>
+  <xacro:property name="cam_or" value="${camera_mount['optical_rpy'][0]}"/>
+  <xacro:property name="cam_op" value="${camera_mount['optical_rpy'][1]}"/>
+  <xacro:property name="cam_oyw" value="${camera_mount['optical_rpy'][2]}"/>
+  <xacro:property name="cam_rx" value="${camera_mount['right_from_left_xyz'][0]}"/>
+  <xacro:property name="cam_ry" value="${camera_mount['right_from_left_xyz'][1]}"/>
+  <xacro:property name="cam_rz" value="${camera_mount['right_from_left_xyz'][2]}"/>
+  <xacro:property name="cam_rr" value="${camera_mount['right_from_left_rpy'][0]}"/>
+  <xacro:property name="cam_rp" value="${camera_mount['right_from_left_rpy'][1]}"/>
+  <xacro:property name="cam_ryw" value="${camera_mount['right_from_left_rpy'][2]}"/>
+
   <xacro:openarm_robot
   arm_type="v10"
   body_type="v10"
@@ -83,6 +107,13 @@
   right_arm_base_rpy="$(arg right_arm_base_rpy)"
   left_arm_base_rpy="$(arg left_arm_base_rpy)"
   can_fd="$(arg can_fd)"
+  camera_head="$(arg camera_head)"
+  camera_assembly_xyz="${cam_ax} ${cam_ay} ${cam_az}"
+  camera_assembly_rpy="${cam_ar} ${cam_ap} ${cam_ayw}"
+  camera_optical_xyz="${cam_ox} ${cam_oy} ${cam_oz}"
+  camera_optical_rpy="${cam_or} ${cam_op} ${cam_oyw}"
+  camera_right_xyz="${cam_rx} ${cam_ry} ${cam_rz}"
+  camera_right_rpy="${cam_rr} ${cam_rp} ${cam_ryw}"
   />
 
 </robot>

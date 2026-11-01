@@ -37,6 +37,13 @@
             left_arm_prefix:='left_'
             right_arm_prefix:='right_'
             can_fd:='true'
+            camera_head:='true'
+            camera_assembly_xyz:='0 0 0.698'
+            camera_assembly_rpy:='0 0 0'
+            camera_optical_xyz:='-0.115 0.055 -0.090'
+            camera_optical_rpy:='0 0 0'
+            camera_right_xyz:='-0.07913 -0.00074 -0.00208'
+            camera_right_rpy:='0.00314 -0.00767 -0.00159'
             "
             >
 
@@ -44,6 +51,7 @@
     <xacro:include filename="$(find openarm_description)/urdf/arm/openarm_arm.xacro" />
     <xacro:include filename="$(find openarm_description)/urdf/body/openarm_body_macro.xacro" />
     <xacro:include filename="$(find openarm_description)/urdf/body/openarm_body.xacro" />
+    <xacro:include filename="$(find openarm_description)/urdf/camera/openarm_camera_head.xacro" />
     <xacro:include filename="$(find openarm_description)/urdf/ee/openarm_hand.xacro" />
     <xacro:include filename="$(find openarm_description)/urdf/ee/openarm_hand_macro.xacro" />
     <xacro:include filename="$(find openarm_description)/urdf/ros2_control/openarm.ros2_control.xacro" />
@@ -110,7 +118,8 @@
             fake_sensor_commands="${fake_sensor_commands}"
             left_arm_prefix="${left_arm_prefix}"
             right_arm_prefix="${right_arm_prefix}"
-            hand="${hand}"/>
+            hand="${hand}"
+            can_fd="${can_fd}"/>
         </xacro:if>
 
         <xacro:if value="$(eval hand and ee_type == 'openarm_hand')">
@@ -141,6 +150,18 @@
                 description_pkg="$(arg description_pkg)"
             />
           </xacro:if>
+
+        <xacro:if value="${camera_head}">
+            <xacro:openarm_camera_head
+                parent="openarm_body_link0"
+                assembly_xyz="${camera_assembly_xyz}"
+                assembly_rpy="${camera_assembly_rpy}"
+                optical_xyz="${camera_optical_xyz}"
+                optical_rpy="${camera_optical_rpy}"
+                right_xyz="${camera_right_xyz}"
+                right_rpy="${camera_right_rpy}"
+                description_pkg="openarm_description"/>
+        </xacro:if>
     </xacro:if>
 
     <xacro:if value="${not bimanual}">

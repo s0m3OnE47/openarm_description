@@ -1,0 +1,52 @@
+# Stereo camera head mount on the OpenArm bimanual body.
+# Parent: openarm_body_link0. CAD STLs share one millimeter frame; URDF scales 0.001.
+#
+# Measured from the camera-head STLs + wip head model.FCStd (stand) against the
+# openarm_body_link0 mesh.  The neck axle is centred on the body's vertical
+# structure rod; the neck leaf is rotated ~15 deg from the clamp line so it is
+# perpendicular to the body top.
+# The neck bearing's flat end is glued to the head; its other end sits on the
+# neck at ~45.91 deg, which sets the head down angle.  The neck outside, neck
+# inside, round plate and bearing stay aligned in their original vertical pose;
+# the head is glued to the bearing's flat face.  The face/optical axis
+# points 45.92 deg below horizontal.  The camera_mount frame is the head CAD
+# origin; the stand and axle links carry their assembled offsets in the URDF.
+#
+# STEREO: hand-eye / CGN / depth use the LEFT eye only (child_frame: left_camera).
+# The RIGHT eye is attached to left via right_from_left_* (OpenCV stereo R,T).
+# Do NOT measure the midpoint between lenses for optical_*.
+#
+# The faceplate is glued to the outside of the head (+15 mm on CAD Y), so its
+# rear face sits on the head front at Y=45 mm.
+# optical_* is the LEFT (robot +Y) lens: CAD (x=-113, y_front=69, z=-130) mm.
+# Its OpenCV frame is +Z = mount +Y (forward), +X = mount +Z (image right),
+# +Y = mount +X (image down), hence rpy = (0, -pi/2, -pi/2).
+
+# Set true 2026-11-01: head unbolted for joint calibration and re-fitted, so the
+# measured assembly/optical values are stale until Test 0b (table plane + lens
+# height) passes. --execute is gated on this flag.
+placeholder: true
+
+parent_frame: openarm_body_link0
+child_frame: left_camera
+
+# openarm_body_link0 -> camera_mount (head CAD origin), metres / radians.
+# Face forward = (0.6957, 0, -0.7184), i.e. 45.92 deg down.
+# The bearing is glued to the head; its other end rests on the neck (~45.91 deg).
+assembly_xyz: [-0.010709, -0.090, 0.752728]
+assembly_rpy: [-1.5707963, 0.769341, 3.1415927]
+
+# camera_mount -> left_camera (OpenCV optical), metres / radians.
+optical_xyz: [-0.113, 0.069, -0.130]
+optical_rpy: [0.0, -1.5707963, -1.5707963]
+
+# Right eye relative to left.  OpenCV stereoCalibrate gives R,T for left->right;
+# the child pose is right-in-left = (-R^T T, R^T), not (T, R).
+# baseline ≈ 0.07916 m.
+right_from_left_xyz: [0.0791422, 0.00087432, 0.00146811]
+right_from_left_rpy: [-0.00312499, 0.00767966, 0.00156633]
+
+# Table drop (place) pose of hand_tcp in openarm_body_link0.
+place:
+  xyz: [0.35, 0.0, 0.20]
+  rpy: [3.14159, 0.0, 0.0]
