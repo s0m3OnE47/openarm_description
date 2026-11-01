@@ -1,0 +1,182 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!-- Fixed camera head (CAD enclosure) mounted on openarm_body_link0. -->
+
+  <xacro:macro name="openarm_camera_head" params="
+      parent:='openarm_body_link0'
+      assembly_xyz:='0 0 0.698'
+      assembly_rpy:='0 0 0'
+      optical_xyz:='-0.115 0.055 -0.090'
+      optical_rpy:='0 0 0'
+      right_xyz:='-0.07913 -0.00074 -0.00208'
+      right_rpy:='0.00314 -0.00767 -0.00159'
+      description_pkg:='openarm_description'">
+
+    <link name="camera_mount"/>
+    <joint name="openarm_body_to_camera_mount" type="fixed">
+      <parent link="${parent}"/>
+      <child link="camera_mount"/>
+      <origin xyz="${assembly_xyz}" rpy="${assembly_rpy}"/>
+    </joint>
+
+    <link name="camera_head">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://${description_pkg}/assets/robot/openarm_v1.0/mesh/camera/Head3-BodyChamfer.stl"
+                scale="0.001 0.001 0.001"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://${description_pkg}/assets/robot/openarm_v1.0/mesh/camera/Head3-BodyChamfer.stl"
+                scale="0.001 0.001 0.001"/>
+        </geometry>
+      </collision>
+    </link>
+    <joint name="camera_mount_to_head" type="fixed">
+      <parent link="camera_mount"/>
+      <child link="camera_head"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <link name="camera_faceplate">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://${description_pkg}/assets/robot/openarm_v1.0/mesh/camera/Faceplate-BodyHole001.stl"
+                scale="0.001 0.001 0.001"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://${description_pkg}/assets/robot/openarm_v1.0/mesh/camera/Faceplate-BodyHole001.stl"
+                scale="0.001 0.001 0.001"/>
+        </geometry>
+      </collision>
+    </link>
+    <!-- Faceplate is glued to the outside of the head shell: its rear face
+         sits on the head front at CAD Y=45 mm (raw mesh rear is Y=30 mm). -->
+    <joint name="camera_mount_to_faceplate" type="fixed">
+      <parent link="camera_mount"/>
+      <child link="camera_faceplate"/>
+      <origin xyz="0 0.015 0" rpy="0 0 0"/>
+    </joint>
+
+    <!-- Neck axles are glued in the assembled pose: rotated so their flat face
+         is parallel to the neck-outside leaf.  Keep them fixed; they are not
+         separate articulation joints. -->
+    <link name="neck_axel_l">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://${description_pkg}/assets/robot/openarm_v1.0/mesh/camera/Neck_Axel_L-Body001Pad001.stl"
+                scale="0.001 0.001 0.001"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://${description_pkg}/assets/robot/openarm_v1.0/mesh/camera/Neck_Axel_L-Body001Pad001.stl"
+                scale="0.001 0.001 0.001"/>
+        </geometry>
+      </collision>
+    </link>
+    <joint name="camera_mount_to_neck_l" type="fixed">
+      <parent link="camera_mount"/>
+      <child link="neck_axel_l"/>
+      <origin xyz="0.031642 0.012132 0" rpy="0 0 0.801455"/>
+    </joint>
+
+    <link name="neck_axel_r">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://${description_pkg}/assets/robot/openarm_v1.0/mesh/camera/Neck_Axel_R-BodyPad.stl"
+                scale="0.001 0.001 0.001"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://${description_pkg}/assets/robot/openarm_v1.0/mesh/camera/Neck_Axel_R-BodyPad.stl"
+                scale="0.001 0.001 0.001"/>
+        </geometry>
+      </collision>
+    </link>
+    <joint name="camera_mount_to_neck_r" type="fixed">
+      <parent link="camera_mount"/>
+      <child link="neck_axel_r"/>
+      <origin xyz="0.031642 0.012132 0" rpy="0 0 0.801455"/>
+    </joint>
+
+    <!-- Compliant neck / stand, converted from Camera-enclosure/wip head model.FCStd.
+         All parts share the camera_mount millimetre frame; visuals only, because the
+         stand intentionally passes through the torso top opening. -->
+    <link name="camera_mount_stand">
+      <visual name="neck_round_plate_visual">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://${description_pkg}/assets/robot/openarm_v1.0/mesh/camera/Neck_Round_plate.stl"
+                scale="0.001 0.001 0.001"/>
+        </geometry>
+      </visual>
+      <visual name="neck_outside_visual">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://${description_pkg}/assets/robot/openarm_v1.0/mesh/camera/Neck_Outside_1x_1xM.stl"
+                scale="0.001 0.001 0.001"/>
+        </geometry>
+      </visual>
+      <visual name="neck_spring_visual">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://${description_pkg}/assets/robot/openarm_v1.0/mesh/camera/Neck_Inside_1x1xM_stronger_spring.stl"
+                scale="0.001 0.001 0.001"/>
+        </geometry>
+      </visual>
+      <visual name="neck_inside_visual">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://${description_pkg}/assets/robot/openarm_v1.0/mesh/camera/Neck_Inside_1x_1xM.stl"
+                scale="0.001 0.001 0.001"/>
+        </geometry>
+      </visual>
+      <visual name="neck_bearing_visual">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://${description_pkg}/assets/robot/openarm_v1.0/mesh/camera/Neck_Bearing_1x_1xM.stl"
+                scale="0.001 0.001 0.001"/>
+        </geometry>
+      </visual>
+    </link>
+    <!-- The neck is straightened about the axle clamp: the stand leaf is vertical
+         and the head stays level at the top bearing.  This origin is the old CAD
+         frame expressed from the (now level) head frame. -->
+    <joint name="camera_mount_to_stand" type="fixed">
+      <parent link="camera_mount"/>
+      <child link="camera_mount_stand"/>
+      <origin xyz="0.013177 -0.032779 0" rpy="0 0 -0.370272"/>
+    </joint>
+
+    <!-- Left stereo eye: OpenCV optical (x right, y down, z forward).
+         Grasp / depth / hand_eye use THIS frame only. -->
+    <link name="left_camera"/>
+    <joint name="camera_mount_to_left_camera" type="fixed">
+      <parent link="camera_mount"/>
+      <child link="left_camera"/>
+      <origin xyz="${optical_xyz}" rpy="${optical_rpy}"/>
+    </joint>
+
+    <!-- Right stereo eye: relative to left from stereo_params.yaml (OpenCV T, R). -->
+    <link name="right_camera"/>
+    <joint name="left_camera_to_right_camera" type="fixed">
+      <parent link="left_camera"/>
+      <child link="right_camera"/>
+      <origin xyz="${right_xyz}" rpy="${right_rpy}"/>
+    </joint>
+
+  </xacro:macro>
+</robot>

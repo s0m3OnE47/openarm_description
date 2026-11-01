@@ -27,9 +27,17 @@ if(BUILD_TESTING)
   # a copyright and license is added to all source files
   set(ament_cmake_cpplint_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
+  find_package(ament_cmake_pytest REQUIRED)
+  ament_add_pytest_test(joint_axis_reflection
+                        test/test_joint_axis_reflection.py)
+  ament_add_pytest_test(v2_camera_components test/test_v2_camera_components.py)
+  ament_add_pytest_test(v2_assembly test/test_v2_assembly.py)
 endif()
 
-install(DIRECTORY launch meshes rviz urdf config
-        DESTINATION share/${PROJECT_NAME})
+foreach(install_dir assets launch rviz scripts)
+  if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${install_dir}")
+    install(DIRECTORY ${install_dir} DESTINATION share/${PROJECT_NAME})
+  endif()
+endforeach()
 
 ament_package()
